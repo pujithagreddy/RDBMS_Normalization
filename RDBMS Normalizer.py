@@ -435,6 +435,10 @@ def normalize_csv(input_csv, output_2NF, output_3NF, output_bcnf, output_4nf, ou
         df = pd.read_csv(input_csv, encoding='ISO-8859-1')
     fd_input = input("Enter the functional dependencies (e.g., 'A -> B; B -> C'): ")
     fds = parse_functional_dependencies(fd_input)
+
+    mvd_input = input("Enter the multi-valued dependencies (use 'A ->> B' format, separated by semicolons): ")
+    mvds = parse_multivalued_dependencies(mvd_input)
+
     
     # Strip any extra whitespace from column names to ensure consistency
     df.columns = df.columns.str.strip()
@@ -480,8 +484,7 @@ def normalize_csv(input_csv, output_2NF, output_3NF, output_bcnf, output_4nf, ou
             tables_in_bcnf = check_and_convert_to_bcnf(tables_in_3NF, relevant_fds, output_bcnf)
 
         if target_nf >= 4:
-            mvd_input = input("Enter the multi-valued dependencies (use 'A ->> B' format, separated by semicolons): ")
-            mvds = parse_multivalued_dependencies(mvd_input)
+            
             print("\nConverting to 4NF...")
             tables_in_4nf = decompose_to_4nf(tables_in_bcnf, mvds, output_4nf)
         
@@ -518,5 +521,5 @@ if __name__ == "__main__":
     output_5nf = "converted5NF.csv"
     primary_key = input("Enter the primary key column names separated by commas: ")
     target_nf = float(input("Enter the target normal form (1, 2, 3, 3.5, 4, or 5): "))
-
+    
     normalize_csv(input_csv, output_2NF, output_3NF, output_bcnf, output_4nf, output_5nf, primary_key,target_nf)
